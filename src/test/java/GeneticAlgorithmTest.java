@@ -135,13 +135,55 @@ public class GeneticAlgorithmTest {
         assertTrue("Optimized distance should be less than or equal to initial distance", optimizedDistance <= initialDistance);
     }
 
+//    @Test
+//    public void testAlgorithmIntegration() {
+//        // Test the complete integration of the GeneticAlgorithm class
+//        ArrayList<City> finalRoute = ga.run();
+//
+//        assertNotNull("Final route should not be null", finalRoute);
+//        assertEquals("Final route should contain all cities", cities.size(), finalRoute.size());
+//        assertTrue("Final route should contain all cities", finalRoute.containsAll(cities));
+//    }
+
     @Test
     public void testAlgorithmIntegration() {
+        long startTime = System.currentTimeMillis();
+
         // Test the complete integration of the GeneticAlgorithm class
         ArrayList<City> finalRoute = ga.run();
+
+        long endTime = System.currentTimeMillis();
+        long duration = endTime - startTime;
+
+        System.out.println("Time taken for algorithm to run: " + duration + " milliseconds");
 
         assertNotNull("Final route should not be null", finalRoute);
         assertEquals("Final route should contain all cities", cities.size(), finalRoute.size());
         assertTrue("Final route should contain all cities", finalRoute.containsAll(cities));
+    }
+
+    @Test
+    public void testAlgorithmPerformance() {
+        int[] sizes = {10, 50, 100, 200, 500};
+
+        for (int size : sizes) {
+            cities.clear();
+            Random random = new Random();
+            for (int i = 0; i < size; i++) {
+                cities.add(new City("City " + (i + 1), 100 + random.nextInt(600), 100 + random.nextInt(400)));
+            }
+
+            long startTime = System.currentTimeMillis();
+            GeneticAlgorithm ga = new GeneticAlgorithm(cities);
+            ArrayList<City> bestRoute = ga.run();
+            long endTime = System.currentTimeMillis();
+            long duration = endTime - startTime;
+
+            System.out.println("Time taken for " + size + " cities: " + duration + " milliseconds");
+
+            assertNotNull("Final route should not be null", bestRoute);
+            assertEquals("Final route should contain all cities", cities.size(), bestRoute.size());
+            assertTrue("Final route should contain all cities", bestRoute.containsAll(cities));
+        }
     }
 }
