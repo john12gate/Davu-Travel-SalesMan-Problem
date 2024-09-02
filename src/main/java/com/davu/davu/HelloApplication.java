@@ -21,7 +21,6 @@ public class HelloApplication extends Application {
     private static ArrayList<City> bestRoute;
     private Canvas canvas;
     private GraphicsContext gc;
-    private int currentCityIndex = 0;
 
     @Override
     public void start(Stage primaryStage) {
@@ -84,22 +83,36 @@ public class HelloApplication extends Application {
     }
 
     public static void main(String[] args) {
-        // Generate 100 cities with random coordinates
+        // Example 1: Small number of cities
         cities = new ArrayList<>();
         Random random = new Random();
+        for (int i = 0; i < 10; i++) {
+            cities.add(new City("City " + (i + 1), 100 + random.nextInt(600), 100 + random.nextInt(400)));
+        }
 
+        long startTime = System.currentTimeMillis();
+        GeneticAlgorithm ga = new GeneticAlgorithm(cities);
+        bestRoute = ga.run();
+        long endTime = System.currentTimeMillis();
+        long duration = endTime - startTime;
+
+        System.out.println("Time taken for 10 cities: " + duration + " milliseconds");
+
+        // Example 2: Larger number of cities
+        cities.clear();
         for (int i = 0; i < 100; i++) {
             cities.add(new City("City " + (i + 1), 100 + random.nextInt(600), 100 + random.nextInt(400)));
         }
 
-        // Solve the TSP using the Genetic Algorithm
-        GeneticAlgorithm ga = new GeneticAlgorithm(cities);
+        startTime = System.currentTimeMillis();
+        ga = new GeneticAlgorithm(cities);
         bestRoute = ga.run();
+        endTime = System.currentTimeMillis();
+        duration = endTime - startTime;
 
-        // Optimize the route using 2-opt
-        bestRoute = ga.optimizeRoute(bestRoute);
+        System.out.println("Time taken for 100 cities: " + duration + " milliseconds");
 
-        // Launch the JavaFX application
+        // Launch the JavaFX application for visualization
         launch(args);
     }
 }
